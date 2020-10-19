@@ -58,7 +58,7 @@ class  IndexController extends Action {
         $usuarioPoremail = $usuario->getUsuarioPorEmail();
         
         if ($valido && count($usuarioPoremail) == 0 && $arrobaFaltando == false && $espacoVazio == false) {
-
+            $usuario1;
             $usuario->salvar();
 
             $this->render('cadastro');
