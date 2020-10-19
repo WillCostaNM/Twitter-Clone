@@ -47,7 +47,7 @@ class  IndexController extends Action {
         $usuario->__set('nome', $_POST['nome']);
         $usuario->__set('email', $_POST['email']);
         $usuario->__set('senha', $_POST['senha']);
-
+        
         $erro = $usuario->validarCadastro();
 
         $valido = $erro['valido'];
@@ -58,7 +58,7 @@ class  IndexController extends Action {
         $usuarioPoremail = $usuario->getUsuarioPorEmail();
         
         if ($valido && count($usuarioPoremail) == 0 && $arrobaFaltando == false && $espacoVazio == false) {
-            $usuario1;
+            
             $usuario->salvar();
 
             $this->render('cadastro');
