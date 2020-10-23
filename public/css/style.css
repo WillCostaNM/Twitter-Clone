@@ -67,3 +67,16 @@ h2 {
     margin: 48px auto;
     position: relative;
 }
+
+.success{
+    border-color: #2ecc71;
+}
+
+.error{
+    border-color: #e74c3c;
+}
+
+.bordaVermelha{
+    border: solid red 1px;
+}
+

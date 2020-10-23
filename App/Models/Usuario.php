@@ -1,8 +1,9 @@
 <?php
     namespace App\Models;
     use MF\Model\Model;
+use PDOException;
 
-    class Usuario extends Model{
+class Usuario extends Model{
         private $id;
         private $nome;
         private $email;
@@ -43,42 +44,40 @@
         //. Validar se um cadastro pode ser feito 
         public function validarCadastro() {
 
-            $valido = true;
-            $espacoVazio = false;            
-            $arrobaFaltando = false;
-            $nome = $this->__get('nome');
-            $email = $this->__get('email');
+            $valido = true;            
+            $nome = $this->__get('nome');            
             $senha = $this->__get('senha');
+            $email = $this->__get('email');
 
+            $naoTemArroba = false;
+            $usuarioNull = false;
 
-            //# Verificar se ha esaços vazios 
-            if(strlen($nome) == 0 || strlen($email) == 0 || strlen($senha) == 0){
-                $espacoVazio = true;
-            }            
-                       
-            
-            
-            if (strlen($email) < 9 || strpos($email, '@') === false){
-                $arrobaFaltando = true;
+            if(strpos($email, '@') === false){
+                $naoTemArroba = true;
             }
 
-            
-            if(strlen($senha) < 5) {                
-                $valido =false;
+            if(strlen($nome) < 5) {
+                $valido = false;
+            }
+
+            if($email === null){
+                $usuarioNull = true;
+            }
+
+            if(strlen($senha) < 5) {            
+                $valido =false;    
                 
-            }         
-
-            
+            }           
             
 
-            $erros = ['valido'=>$valido, 'espacoVazio' => $espacoVazio, 'arrobaFaltando' => $arrobaFaltando];
+            $erros = ['usuarioNull'=>$usuarioNull, 'valido'=>$valido, 'naotemArroba'=>$naoTemArroba];
             
             return $erros;
         }
 
         //. Recuperar um usuário por e-mail para verificar se ja existe 
-        public function getUsuarioPorEmail() {
-            $query= 'select 
+        public function getUsuarioPorEmail($email) {
+            $query = 'select 
                         nome, email 
                     from 
                         usuarios 
@@ -87,15 +86,23 @@
             ';
 
             $stmt = $this->db->prepare($query);
-            $stmt->bindValue(':email', $this->__get('email'));
+            $stmt->bindValue(':email', $email);
             $stmt->execute();
+            $soma = $stmt->rowCount();   
 
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $resultado = 0;
+            if($soma > 0) {
+                $resultado = 'Encontrado';
+            }else {
+                $resultado = 'email valido';
+            }
+
+            return $resultado;            
         }
-
-    }
-
+        
+        
+        
+    }    
     
-
 
 ?>

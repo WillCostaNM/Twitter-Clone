@@ -12,56 +12,50 @@
             <h2>Crie sua conta</h2>
           </div>
         </div>
-
+        
         <div class="row">
           <div class="col">
+
+            <form id="inscreverseForm" action="/registrar" method="post">
+
+              <?php if($this->view->emailCadastrado) {?>
+                <label id="labelUsuarioExistente" style="color: red;">Usuário já cadastrado</label>
+              <?php } ?>
+
+              <div class="form-group ">                
+                <input  value="<?= $this->view->usuario['nome'] ?>" name="nome" type="text" class="form-control nome" placeholder="Nome">
+              </div>
+
+                            
+                <div class="form-group">
+                  <input onload="getEmail(this)" onblur="getEmail(this)" onfocus="getEmail(this)" onkeyup="getEmail(this)" value="<?= $this->view->usuario['email'] ?>" name="email" id="email" class="form-control"  aria-describedby="emailHelp" placeholder="E-mail">
+                  <label style="color: red;" id="label">E-mail já cadastrado</label> 
+
+                </div>
+                
+              
+
+              <div class="form-group">                
+                <input value="<?= $this->view->usuario['senha'] ?>" name="senha" type="text" class="form-control senha"  placeholder="Senha">
+              </div>
+
+              
             
-            <form action="/registrar" method="post">
-              <div class="form-group">
-                <input value="<?= $this->view->usuario['nome']?>" name="nome" type="text" class="form-control" placeholder="Nome">
-              </div>
-
-              <?php if($this->view->arrobaFaltando) {?>
-                <small class="form-text text-danger">
-                  *Insira um e-mail válido!
-                </small>
-              <?php } ?>
-              
-              <div class="form-group">
-                <input value="<?= $this->view->usuario['email']?>" name="email" type="text" class="form-control" placeholder="E-mail">
-              </div>
-              
-
-              <?php if($this->view->valido == false) {?>
-                <small class="form-text text-danger">
-                  *A senha deve conter pelo menos 5 caracteres!
-                </small>
-              <?php } ?>
-
-              <div class="form-group">
-                <input value="<?= $this->view->usuario['senha']?>" name="senha" type="password" class="form-control" placeholder="Senha">
-              </div>
-
-              <?php if($this->view->usuarioExistente == true) {?>
-                <small class="form-text text-danger">
-                  *Usuário já cadastrado!
-                </small>
-              <?php } ?>
 
               <div class="mt-4 mb-4">
                 <small class="form-text">
                   Ao inscrever-se, você concorda com os Termos de Serviço e com as Políticas de Privacidade, incluindo o Uso de Cookies. Outras pessoas poderão encontrar você pelo e-mail ou número de telefone fornecido · Opções de Privacidade
                 </small>
               </div>
-              <button type="submit" class="btn btn-primary btn-block">Inscrever-se</button>
+              
+              
 
+                <button disabled="disabled" id="btnSubmit" type="submit" class="btn btn-primary btn-block">Inscrever-se</button>
               
-              <?php if($this->view->espacoVazio == true) {?>
-                <small class="form-text text-danger">
-                  *Há campo(s) em branco, preecha(os) e tente novamente.
-                </small>
-              <?php } ?>
               
+
+
+
 
             </form>
 
@@ -72,8 +66,3 @@
     </div>
   </div>
 </div>
-
-
-
-    
-  

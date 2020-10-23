@@ -26,6 +26,12 @@
                 'action' => 'registrar'
 
             ];
+
+            $routes['email'] = [
+                'route' => '/getEmail',
+                'controller' => 'indexController',
+                'action' => 'getEmail'
+            ];
             
             $this->setRoutes($routes);
         }

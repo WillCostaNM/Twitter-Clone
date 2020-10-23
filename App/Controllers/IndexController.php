@@ -1,6 +1,7 @@
 <?php
-
 namespace App\Controllers;
+session_start();
+
 
 
 
@@ -9,21 +10,19 @@ namespace App\Controllers;
 use App\Models\Usuario;
 use MF\Controller\Action;
 use MF\Model\Container;
+use App\Connection;
 
+class  IndexController extends Action { 
+       
 
-class  IndexController extends Action {    
-
-    public function index() {
-        
+    public function index() {        
         $this->render('index');
     }
 
 
     public function inscreverse() {
-
         
-
-        $this->view->espacoVazio = false;
+        $this->view->emailCadastrado = false;
         $this->view->arrobaFaltando = false;
         $this->view->valido = true; 
         $this->view->usuarioExistente = false;
@@ -36,80 +35,93 @@ class  IndexController extends Action {
         ];
 
         $this->render('inscreverse');
+        
+        
     }
-    
+  
+
+    //* AQUI ESTÁ A ROTA DO MÉTODO AJAX JQUERY QUE VERIFICA SE O USUÁRIO JA FOI CADASTRADO, ASSIM ENVIANDO UMA RESPOSTA PARA UM MELHOR FEEDBACK VISUAL
+    public function getEmail() {
+
+        $emailString = $_POST;
+        $string = implode($emailString);
+        $usuario = Container::getModel('Usuario');
+        $email = $usuario->getUsuarioPorEmail($string);
+
+        if($email !== 'Encontrado'){
+            $_SESSION['email'] = $string;
+        }else{
+            $_SESSION['email'] = null;
+            echo 'Encontrado';
+        }           
+        
+        
+
+    }
+
+    //* AQUI É A FUNÇÃO QUE REGISTRA E TAMBÉM VERIFICA SE O USUÁRIO JÁ FOI CADASTRADO, SÓ QUE AGR VERIFICADO PELA PARTE DO SERVIDOR, POIS SE O USUÁRIO JA EXISTE O MESMO NÃO É CADASTRADO
     public function registrar() {
+
+        $email = $_SESSION['email'];
+        
                 
         //# Sucesso 
-        //* Aqui cria uma variavel que instancia a classe Usuario
+        // //* Aqui cria uma variavel que instancia a classe Usuario        
         $usuario = Container::getModel('Usuario');
-
         $usuario->__set('nome', $_POST['nome']);
-        $usuario->__set('email', $_POST['email']);
+        $usuario->__set('email', $email);
         $usuario->__set('senha', $_POST['senha']);
+        $emailDigitado = $usuario->getUsuarioPorEmail($email);
+
+        $emailExistente = false;
+
+        if($emailDigitado == 'Encontrado'){
+            $emailExistente = true;
+        }       
         
         $erro = $usuario->validarCadastro();
 
-        $valido = $erro['valido'];
-        $espacoVazio = $erro['espacoVazio'];
-        $arrobaFaltando = $erro['arrobaFaltando'];
+        $valido = $erro['valido'];        
+        $naoTemArroba = $erro['naotemArroba'];                 
+        $usuarioNull = $erro['usuarioNull'];
         
         
-        $usuarioPoremail = $usuario->getUsuarioPorEmail();
-        
-        if ($valido && count($usuarioPoremail) == 0 && $arrobaFaltando == false && $espacoVazio == false) {
+        if ($emailExistente == false && $valido && $naoTemArroba === false && $usuarioNull === false) {
             
             $usuario->salvar();
-
             $this->render('cadastro');
 
-
         } else {
+
+            if($emailExistente){                
+                $this->view->emailCadastrado = true;
+                
+
+            }else{
+                $this->view->emailCadastrado = false;
+
+            }
+
 
             $this->view->usuario = [
                 'nome' => $_POST['nome'],
                 'senha' =>$_POST['senha'],
                 'email' =>$_POST['email']
-            ];
-
-            $this->view->espacoVazio = false;
-            $this->view->arrobaFaltando = false;
-            $this->view->valido = true; 
-            $this->view->usuarioExistente = false;
-
-            //* Se o usuario existir
-            if(count($usuarioPoremail) > 0) {
-                $this->view->usuarioExistente = true;
-                
-            }
-            //* se o campo é valido 
-            if($valido == false){
-                $this->view->valido = false;
-                $this->view->usuarioExistente = false;
-                
-            }
+            ];            
             
-            //* verificar espaços vazios
-            if($espacoVazio){
-                $this->view->espacoVazio = true;
-                $this->view->usuarioExistente = false;
-
-            }
-
-            //* verifica se o email é valido
-            if($arrobaFaltando){
-                $this->view->arrobaFaltando = true;
-                $this->view->usuarioExistente = false;
-
-            }            
 
             $this->render('inscreverse');
-
+            
+            
         }
 
 
         //# Erro 
     }
+
+    
+    
+    
 
 }
 
