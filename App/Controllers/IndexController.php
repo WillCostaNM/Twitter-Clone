@@ -7,15 +7,16 @@ session_start();
 
 //*Recursos do miniframework
 
-use App\Models\Usuario;
 use MF\Controller\Action;
 use MF\Model\Container;
-use App\Connection;
+
 
 class  IndexController extends Action { 
        
 
-    public function index() {        
+    public function index() {
+
+        $this->view->login = isset($_GET['login']) ? $_GET['login'] : '';
         $this->render('index');
     }
 
@@ -70,7 +71,8 @@ class  IndexController extends Action {
         $usuario = Container::getModel('Usuario');
         $usuario->__set('nome', $_POST['nome']);
         $usuario->__set('email', $email);
-        $usuario->__set('senha', $_POST['senha']);
+        $usuario->__set('senha', md5($_POST['senha']));
+        
         $emailDigitado = $usuario->getUsuarioPorEmail($email);
 
         $emailExistente = false;

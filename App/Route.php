@@ -33,6 +33,45 @@
                 'action' => 'getEmail'
             ];
             
+            $routes['autenticar'] = [
+                'route' => '/autenticar',
+                'controller' => 'AuthController',
+                'action' => 'autenticar'
+            ];
+
+            $routes['timeline'] = [
+                'route' => '/timeline',
+                'controller' => 'AppController',
+                'action' => 'timeline'
+            ];
+
+            $routes['sair'] = [
+                'route' => '/sair',
+                'controller' => 'AuthController',
+                'action' => 'sair'
+            ];
+
+            $routes['tweet'] = [
+                'route' => '/tweet',
+                'controller' => 'AppController',
+                'action' => 'tweet'
+            ];
+            
+            $routes['conteudo'] = [
+                'route' => '/conteudo',
+                'controller' => 'AppController',
+                'action' => 'conteudo'
+            ];
+
+            $routes['quem_seguir'] = [
+                'route' => '/quem_seguir',
+                'controller' => 'AppController',
+                'action' => 'quemSeguir'
+            ];
+
+            
+
+
             $this->setRoutes($routes);
         }
 
