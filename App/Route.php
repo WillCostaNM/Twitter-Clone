@@ -75,6 +75,12 @@
                 'action' => 'pesquisarUsuarios'
             ];
 
+            $routes['acao'] = [
+                'route' => '/acao',
+                'controller' => 'AppController',
+                'action' => 'acao'
+            ];
+
             
 
 
