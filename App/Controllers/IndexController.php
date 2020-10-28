@@ -17,7 +17,7 @@ class  IndexController extends Action {
     public function index() {
 
         $this->view->login = isset($_GET['login']) ? $_GET['login'] : '';
-        $this->render('index');
+        $this->render('index','layout2');
     }
 
 
@@ -35,7 +35,7 @@ class  IndexController extends Action {
 
         ];
 
-        $this->render('inscreverse');
+        $this->render('inscreverse','layout2');
         
         
     }
@@ -91,7 +91,7 @@ class  IndexController extends Action {
         if ($emailExistente == false && $valido && $naoTemArroba === false && $usuarioNull === false) {
             
             $usuario->salvar();
-            $this->render('cadastro');
+            $this->render('cadastro','layout2');
 
         } else {
 
@@ -112,7 +112,7 @@ class  IndexController extends Action {
             ];            
             
 
-            $this->render('inscreverse');
+            $this->render('inscreverse', 'layout2');
             
             
         }

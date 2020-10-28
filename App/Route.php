@@ -69,6 +69,12 @@
                 'action' => 'quemSeguir'
             ];
 
+            $routes['pesquisar_usuarios'] = [
+                'route' => '/pesquisar_usuarios',
+                'controller' => 'AppController',
+                'action' => 'pesquisarUsuarios'
+            ];
+
             
 
 

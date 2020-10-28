@@ -8,14 +8,18 @@ class  AppController extends Action {
 
     public function timeline(){        
 
+        
+
         $this->validaAutenticacao();
 
         $tweet = Container::getModel('Tweet');
         $tweet->__set('id_usuario', $_SESSION['id']);
         $tweets = $tweet->getAll();
-
         $this->view->tweets = $tweets;
-        $this->render('timeline');
+        $this->render('timeline','layout');
+
+        
+        
 
     }
 
@@ -31,11 +35,33 @@ class  AppController extends Action {
         echo json_encode($ultimoTweet);
     }
 
-    public function quemseguir() {
+    public function quemseguir() {       
+
         $this->validaAutenticacao();
 
-        $this->render('quemSeguir');
+        $this->render('quemSeguir','layout');
         
+        
+        
+    }
+
+    public function pesquisarUsuarios(){
+        $this->validaAutenticacao();
+        
+        $pesquisarPor = isset($_POST['pesquisarPor']) ? $_POST['pesquisarPor'] : '';
+
+        $usuarios = [];
+
+        if($pesquisarPor != ''){
+            $usuario = Container::getModel('Usuario');
+            $usuario->__set('nome', $pesquisarPor);
+            $usuario->__set('id', $_SESSION['id']);
+
+            $usuarios = $usuario->getAll();
+        }
+
+        echo json_encode($usuarios);
+
     }
 
     

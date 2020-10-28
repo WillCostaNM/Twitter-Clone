@@ -1,9 +1,59 @@
 
+
+
+
 $(document).ready(function () {
+
     $('#label').hide()
     $('#btnSubmit').prop('disabled', true)
 
+
+    //. ESCONDER LABEL DE USUARIO CADASTRADO
+    $('#inscreverseForm').on('click', function () {
+        $('#labelUsuarioExistente').hide()
+    })
+
+
+    //. REGRAS DE VALIDAÇÃO FORMULÁRIO COM JQUERY VALIDATE
+    $('#inscreverseForm').validate({
+
+        rules: {
+            nome: {
+                required: true,
+                minWords: 2,
+                nmrMinimoDePalavrasPorNome: true
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            senha: {
+
+                required: true,
+                minlength: 5
+            }
+        }
+
+    })
+
+
+    //. REGRAS DE VALIDAÇÃO FORMULÁRIO COM JQUERY VALIDATE
+    $('#inscreverseForm input').bind('keyup blur click', function () {
+
+        if ($('#inscreverseForm').validate().checkForm()) {
+            $('#btnSubmit').prop('disabled', false)
+
+        } else {
+            $('#btnSubmit').prop('disabled', true)
+
+        }
+
+    })
+
+
 })
+
+
 
 //; FUNÇÃO QUE ENVIA PARA A VARIAVEL GLOBAL POST DA ROTA /getEmail O EMAIL DIGITADO PELO USUARIO 
 function getEmail(sthis) {
@@ -49,14 +99,6 @@ function getEmail(sthis) {
 
 }
 
-//. ESCONDER LABEL DE USUARIO CADASTRADO
-$(document).ready(function () {
-
-    $('#inscreverseForm').on('click', function () {
-        $('#labelUsuarioExistente').hide()
-    })
-
-})
 
 
 //; CRIAÇÃO DE METODO JQUERY VALIDATE 
@@ -81,47 +123,8 @@ jQuery.validator.addMethod("nmrMinimoDePalavrasPorNome", function (value, elemen
 }, "O nome dever ter pelo menos 2 letras")
 
 
-//. REGRAS DE VALIDAÇÃO FORMULÁRIO COM JQUERY VALIDATE
-$(document).ready(function () {
 
-    $('#inscreverseForm').validate({
-
-        rules: {
-            nome: {
-                required: true,
-                minWords: 2,
-                nmrMinimoDePalavrasPorNome: true
-            },
-            email: {
-                required: true,
-                email: true
-            },
-            senha: {
-
-                required: true,
-                minlength: 5
-            }
-        }
-
-    })
-
-
-
-    $('#inscreverseForm input').bind('keyup blur click', function () {
-
-        if ($('#inscreverseForm').validate().checkForm()) {
-            $('#btnSubmit').prop('disabled', false)
-
-        } else {
-            $('#btnSubmit').prop('disabled', true)
-
-        }
-
-    })
-
-});
-
-
+//. PUBLICAR MENSAGEM SEM LOADING 
 $('#formTweet').submit(function (e) {
     e.preventDefault()
     let dados = $('#formTweet').serialize()
@@ -135,8 +138,8 @@ $('#formTweet').submit(function (e) {
             let data = null
             let tweet = null
             valor.forEach((valor, indice, array) => {
-                nome = valor.nome 
-                data = valor.data 
+                nome = valor.nome
+                data = valor.data
                 tweet = valor.tweet
             });
 
@@ -185,7 +188,7 @@ $('#formTweet').submit(function (e) {
             divCol.appendChild(form)
             form.appendChild(divButton)
             divButton.appendChild(button)
-            button.appendChild(smallButton)            
+            button.appendChild(smallButton)
 
             $('.after').after(divRow)
 
@@ -196,23 +199,76 @@ $('#formTweet').submit(function (e) {
     $('#formTweet')[0].reset();
 })
 
-$(document).ready(function () {
-    $('.quem').on('click', function(e){
-        e.preventDefault()
-        $('body').load('/app/quemSeguir.phtml')
-    
-        // console.log('to aqui')
-    
-        // $.ajax({
-        //     type: "post",
-        //     url: "/quem_seguir",
-        //     data: "",
-        //     dataType: "",
-        //     success: function (response) {
-        //         console.log('sucesso')
-        //     }
-        // });
-    })
-    
-});
 
+
+//. PESQUISAR POR USUARIOS SEM LOADING 
+$('#procurar').submit(function(e){
+    $('.divRow').remove()
+
+    e.preventDefault()
+    let dados = $('#procurar').serialize()
+    $.ajax({
+        type: "post",
+        url: "/pesquisar_usuarios",
+        data: dados,
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+            let nome = null
+
+            response.forEach((valor, indice, array) => {
+                nome = valor.nome
+            
+                let divRow = document.createElement('div')
+                divRow.className = 'row mb-2 divRow'
+
+                let divCol = document.createElement('div')
+                divCol.className = 'col'
+
+                let divCard = document.createElement('div')
+                divCard.className = 'card'
+
+                let cardBody = document.createElement('div')
+                cardBody.className = 'card-body'
+                
+                let divRow2 = document.createElement('div')
+                divRow2.className = 'row'
+                
+                let divCol21 = document.createElement('div')
+                divCol21.className = 'col-md-6'
+                divCol21.innerHTML = nome
+
+                let divCol22 = document.createElement('div')
+                divCol22.className = 'col-md-6 d-flex justify-content-end'
+
+                let divPura = document.createElement('div')
+
+                let linkSeguir = document.createElement('a')
+                linkSeguir.href = '#'
+                linkSeguir.className = 'btn btn-success'
+                linkSeguir.innerHTML = 'Seguir'
+
+                let linkDeixar = document.createElement('a')
+                linkDeixar.href = '#'
+                linkDeixar.className = 'btn btn-danger mr'
+                linkDeixar.innerHTML = 'Deixar de seguir'                
+                
+                divRow.appendChild(divCol)
+                divCol.appendChild(divCard)
+                divCard.appendChild(cardBody)
+                cardBody.appendChild(divRow2)
+                divRow2.appendChild(divCol21)
+                divRow2.appendChild(divCol22)
+                divCol22.appendChild(divPura)
+                divPura.appendChild(linkSeguir)
+                divPura.appendChild(linkDeixar)
+
+                $('.procurarPorUsuarios').after(divRow)
+                
+            });
+        },
+        error: function(e){
+            console.log('erro')
+        }
+    });
+} )
