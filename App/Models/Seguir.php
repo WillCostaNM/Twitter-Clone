@@ -6,8 +6,6 @@ use PDOException;
 class Seguir extends Model{
     private $id;
 
-
-
     public function __get($atributo) {
         return $this->$atributo;
     }
@@ -18,7 +16,7 @@ class Seguir extends Model{
 
     public function seguirUsuario($id){
 
-        $query = 'insert into 
+        $query = 'insert into
                     usuarios_seguidores
                     (id_usuario, id_usuario_seguindo)
                 values

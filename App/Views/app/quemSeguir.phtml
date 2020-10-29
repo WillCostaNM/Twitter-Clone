@@ -1,52 +1,64 @@
 
-
+		
 		<div class="col-md-6">
 			
-		<div class="row mb-2">
+		<div class="row mb-2" id="procurar">
 				<div class="col">
 					<div class="card">
 						<div class="card-body">
-							<form method="get" action="/quem_seguir">
+							<!-- <form method="get" action="/quem_seguir">
 								<div class="input-group mb-3">
 									<input type="text" name="pesquisarPor" class="form-control" placeholder="Quem você está procurando?">
 									<div class="input-group-append">
 										<button class="btn btn-primary" type="submit">Procurar</button>
 									</div>
 								</div>
+							</form> -->
+
+							<form>
+                                <div class="input-group mb-3">
+                                    <input type="text" name="pesquisarPor" class="form-control" placeholder="Quem você está procurando?">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary btn_procurar" type="submit">Procurar</button>
+                                    </div>
+                                </div>
 							</form>
+							
+
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<?php foreach($this->view->usuarios as $indice_arr => $usuario) { ?>
-				<div class="row mb-2">
-					<div class="col">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-md-6">
-										<?= $usuario['nome'] ?>
+			<div id="xerebebeu">
+				<?php foreach($this->view->usuarios as $indice_arr => $usuario) { ?>
+						<div class="row mb-2 remove">
+							<div class="col">
+								<div class="card">
+									<div class="card-body">
+										<div class="row">
+											<div class="col-md-6">
+												<?= $usuario['nome'] ?>
+											</div>
 										
-									</div>
-								
-									<div class="col-md-6 d-flex justify-content-end">
-										<div>
-											<?php if($usuario['seguindo_sn'] == 0 ){ ?>
-												<a href="/acao?acao=seguir&id_usuario=<?=$usuario['id']?>" class="btn btn-success">Seguir</a>
-											<?php } ?>
+											<div class="col-md-6 d-flex justify-content-end">
+												<div>
+													<?php if($usuario['seguindo_sn'] == 0 ){ ?>
+														<a href="/acao?acao=seguir&id_usuario=<?=$usuario['id']?>" class="btn btn-success seguir">Seguir</a>
+													<?php } ?>
 
-											<?php if($usuario['seguindo_sn'] == 1 ){ ?>
-												<a href="/acao?acao=deixar_de_seguir&id_usuario=<?=$usuario['id']?>" class="btn btn-danger">Deixar de seguir</a>
-											<?php } ?>
+													<?php if($usuario['seguindo_sn'] == 1 ){ ?>
+														<a href="/acao?acao=deixar_de_seguir&id_usuario=<?=$usuario['id']?>" class="btn btn-danger">Deixar de seguir</a>
+													<?php } ?>
+
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			<?php } ?>
+						</div>					
+				<?php } ?>
+			</div>
 
 
 		</div>	

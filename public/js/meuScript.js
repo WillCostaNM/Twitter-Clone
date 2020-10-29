@@ -198,3 +198,46 @@ $('#formTweet').submit(function (e) {
     });
     $('#formTweet')[0].reset();
 })
+
+
+$(document).ready(() => {
+    
+    $('.btn_procurar').on('click', (e) => {
+
+        $(".remove").remove()
+        e.preventDefault()
+        let pesquisarPor = $('form').serialize()
+        console.log(pesquisarPor)
+        $.ajax({
+            type: "GET",
+            url: "/quem_seguir",
+            data: pesquisarPor,
+            success: (dados) => {
+                let html1 = $(dados).find("#xerebebeu")
+                html = html1.html()
+                console.log(html)                
+                $('#procurar').after(html)
+
+                
+
+
+
+
+            },
+            error: error => { console.log(error) }
+        })
+    })
+
+    
+    // $('.seguir').on('click', (e)=>{
+    //     e.preventDefault()
+
+    //     let seguir = 'seguir'
+    //     let dados = {
+    //         acao: seguir
+    //         id:
+    //     }
+    // })
+
+})
+

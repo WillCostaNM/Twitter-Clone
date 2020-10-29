@@ -8,8 +8,6 @@ class  AppController extends Action {
 
     public function timeline(){        
 
-        
-
         $this->validaAutenticacao();
 
         $tweet = Container::getModel('Tweet');
@@ -17,9 +15,6 @@ class  AppController extends Action {
         $tweets = $tweet->getAll();
         $this->view->tweets = $tweets;
         $this->render('timeline','layout');
-
-        
-        
 
     }
 
@@ -35,8 +30,8 @@ class  AppController extends Action {
         echo json_encode($ultimoTweet);
     }
 
-    public function quemseguir() {       
-
+    public function quemSeguir() {
+        
         $this->validaAutenticacao();
 
 		$pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
@@ -44,7 +39,7 @@ class  AppController extends Action {
 		$usuarios = array();
 
 		if($pesquisarPor != '') {
-			
+
 			$usuario = Container::getModel('Usuario');
 			$usuario->__set('nome', $pesquisarPor);
 			$usuario->__set('id', $_SESSION['id']);
@@ -53,15 +48,13 @@ class  AppController extends Action {
 		}
 
 		$this->view->usuarios = $usuarios;
-
-        $this->render('quemSeguir','layout');
         
-    }   
+       $this->render('quemSeguir','layout');
+    }
 
     public function acao() {
 
 		$this->validaAutenticacao();
-
 		$acao = isset($_GET['acao']) ? $_GET['acao'] : '';
 		$id_usuario_seguindo = isset($_GET['id_usuario']) ? $_GET['id_usuario'] : '';
 
