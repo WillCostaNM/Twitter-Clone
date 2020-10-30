@@ -14,7 +14,27 @@ class  AppController extends Action {
         $tweet->__set('id_usuario', $_SESSION['id']);
         $tweets = $tweet->getAll();
         $this->view->tweets = $tweets;
+
+
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+        $this->view->infoUsuario = $usuario->getInfoUsuario();
+        $this->view->totalTweets = $usuario->getTotalTeets();
+        $this->view->totalSeguindo = $usuario->getTotalSeguindo();
+        $this->view->totalSeguidores = $usuario->getTotalSeguidores();
+
         $this->render('timeline','layout');
+    }
+
+    public function removerTweet(){
+
+        $this->validaAutenticacao();
+
+        $idTweet = isset($_GET['id']) ? $_GET['id'] : '';
+        $tweet = Container::getModel('Tweet');
+        $tweet->__set('id_usuario', $_SESSION['id']);
+        $tweet->removerTweet($idTweet);
+        header('Location: /timeline');
 
     }
 
@@ -45,8 +65,14 @@ class  AppController extends Action {
 			$usuario->__set('id', $_SESSION['id']);
 			$usuarios = $usuario->getAll();
 
-		}
-
+        }
+		$usuario = Container::getModel('Usuario');
+        
+        $usuario->__set('id', $_SESSION['id']);
+        $this->view->infoUsuario = $usuario->getInfoUsuario();
+        $this->view->totalTweets = $usuario->getTotalTeets();
+        $this->view->totalSeguindo = $usuario->getTotalSeguindo();
+        $this->view->totalSeguidores = $usuario->getTotalSeguidores();
 		$this->view->usuarios = $usuarios;
         
        $this->render('quemSeguir','layout');
@@ -66,13 +92,24 @@ class  AppController extends Action {
 
 		} else if($acao == 'deixar_de_seguir') {
 			$usuario->deixarSeguirUsuario($id_usuario_seguindo);
-
 		}
 
 		header('Location: /quem_seguir');
-	}
+    }
 
     
+    public function remover(){
+        
+        $this->validaAutenticacao();
+        $id = $_SESSION['id'];
+        $tweet = Container::getModel('Tweet');
+        $tweet->__set('id_tweet', $_POST['id_tweet']);
+
+        $resultado = $tweet->removerTweet2($id);
+        echo $resultado;
+    }
+    
+
     public function validaAutenticacao(){
 
         session_start();

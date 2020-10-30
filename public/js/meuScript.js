@@ -125,7 +125,7 @@ jQuery.validator.addMethod("nmrMinimoDePalavrasPorNome", function (value, elemen
 
 
 //. PUBLICAR MENSAGEM SEM LOADING 
-$('#formTweet').submit(function (e) {
+$('#formTweet').on('submit',function (e) {
     e.preventDefault()
     let dados = $('#formTweet').serialize()
     $.ajax({
@@ -134,18 +134,21 @@ $('#formTweet').submit(function (e) {
         data: dados,
         dataType: "json",
         success: function (valor) {
+            console.log(valor)
             let nome = null
             let data = null
             let tweet = null
+            let id = null
             valor.forEach((valor, indice, array) => {
                 nome = valor.nome
                 data = valor.data
                 tweet = valor.tweet
+                id = valor.id
             });
 
 
             let divRow = document.createElement('div')
-            divRow.className = 'row tweet'
+            divRow.className = 'row tweet tweet2'
 
             let divCol = document.createElement('div')
             divCol.className = 'col'
@@ -173,7 +176,7 @@ $('#formTweet').submit(function (e) {
 
             let button = document.createElement('button')
             button.type = 'submit'
-            button.className = 'btn btn-danger'
+            button.className = 'btn btn-danger remover'
 
             let smallButton = document.createElement('small')
             smallButton.innerHTML = 'Remover'
@@ -192,18 +195,32 @@ $('#formTweet').submit(function (e) {
 
             $('.after').after(divRow)
 
+            // ------------------------------------------------------------------------
+            let dados = {id_tweet: id}
 
+            $('.remover').on('click', function(e){
+                e.preventDefault()
+                $.ajax({
+                    type: "post",
+                    url: "/remover",
+                    data: dados,
+                    success: function (response) {
+                        if(response = 'excluido'){
+                            $('.tweet2').remove()
+                        }
+                    }
+                });
 
+            })
         }
     });
     $('#formTweet')[0].reset();
 })
 
-
+//.MOSTRAR QUEM ESTA SEGUINDO 
 $(document).ready(() => {
-    
-    $('.btn_procurar').on('click', (e) => {
 
+    $('.btn_procurar').on('click', (e) => {
         $(".remove").remove()
         e.preventDefault()
         let pesquisarPor = $('form').serialize()
@@ -215,29 +232,27 @@ $(document).ready(() => {
             success: (dados) => {
                 let html1 = $(dados).find("#xerebebeu")
                 html = html1.html()
-                console.log(html)                
+                console.log(html)
                 $('#procurar').after(html)
-
-                
-
-
-
-
             },
             error: error => { console.log(error) }
         })
     })
 
-    
-    // $('.seguir').on('click', (e)=>{
-    //     e.preventDefault()
-
-    //     let seguir = 'seguir'
-    //     let dados = {
-    //         acao: seguir
-    //         id:
-    //     }
-    // })
-
 })
 
+
+
+
+    
+    
+    // $('#removerTimeline').on('submit', function(e){
+    //     e.preventDefault()
+    //     $.ajax({
+    //         type: "post",
+    //         url: "/remover_tweet",
+    //         success: function (response) {
+    //             console.log(response)
+    //         }
+    //     });
+    // })

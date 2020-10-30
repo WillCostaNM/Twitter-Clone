@@ -33,7 +33,7 @@ class Seguir extends Model{
 
     public function deixarSeguirUsuario($id){
 
-        $query = 'delete from 
+        $query = 'delete from
                     usuarios_seguidores
                 where
                     id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo

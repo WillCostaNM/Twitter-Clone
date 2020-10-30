@@ -10,6 +10,7 @@ class Tweet extends Model{
     private $id_usuario;
     private $tweet;
     private $data;  
+    private $id_tweet;
 
     public function __get($atributo) {
         return $this->$atributo;
@@ -78,7 +79,37 @@ class Tweet extends Model{
         return $stmt->fetchAll(\PDO::FETCH_OBJ);
     }
 
+    public function removerTweet($id){
+        
+        $query = 'delete from 
+                tweets
+            where
+                id = :id_tweet and id_usuario = :id_usuario
+        ';
 
+        $stmt = $this->db->prepare($query);
+        $stmt->bindvalue(':id_tweet',$id );
+        $stmt->bindvalue(':id_usuario', $this->__get('id_usuario'));
+        $stmt->execute();
+
+        return 'excluido';                
+    }
+
+    public function removerTweet2($id){
+        
+        $query = 'delete from 
+                tweets
+            where
+                id = :id_tweet and id_usuario = :id_usuario
+        ';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindvalue(':id_tweet', $this->__get('id_tweet'));
+        $stmt->bindvalue(':id_usuario', $id);
+        $stmt->execute();
+
+        return 'excluido';
+    }
 
 
 }

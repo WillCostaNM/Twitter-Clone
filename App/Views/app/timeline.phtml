@@ -19,19 +19,21 @@
 					<div class="col">
 						<p><strong><?= $tweet['nome'] ?></strong> <small><span class="text text-muted">- <?= $tweet['data'] ?></span></small></p>
 						<p><?= $tweet['tweet'] ?></p>
+						
 
 						<br />
-						<form>
-							<div class="col d-flex justify-content-end">
-								<button type="submit" class="btn btn-danger"><small>Remover</small></button>
-							</div>
-						</form>
+						<?php if($tweet['id_usuario'] == $_SESSION['id']) {?>
+							<form id="removerTimeline" method="get" action="/remover_tweet">
+								<div class="col d-flex justify-content-end">
+									<input id="id" name="id" class="id_usuario" hidden="hiden" value="<?= $tweet['id'] ?>"></input>
+									<button class="btn btn-danger removerTweetTimeline"><small>Remover</small></button>
+								</div>
+							</form>
+						<?php } ?>
 					</div>
 				</div>
 			<?php } ?>
-
 		</div>
-
 
 
 		<div class="col-md-3">
